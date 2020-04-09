@@ -74,7 +74,7 @@ keystone_config_apache () {
 	sleep 3
 	apache_file=/etc/apache2/apache2.conf
 
-	echo "ServerName $HOST_CTL" >> apache_file
+	echo "ServerName $HOST_CTL" >> $apache_file
 	echocolor "Done configure the Apache HTTP Server"
 }
 

@@ -56,7 +56,7 @@ install_ntp () {
 	ntp_bak_file=/etc/chrony/chrony.conf.bak
 
 	# Backup config file
-	cp ntp_file ntp_bak_file
+	cp $ntp_file $ntp_bak_file
 
 	sed -i 's/pool 2.debian.pool.ntp.org offline iburst/ \
 pool 2.debian.pool.ntp.org offline iburst \
@@ -136,7 +136,7 @@ install_memcached () {
 	memcache_bak_file=/etc/memcached.conf.bak
 
 	# Backup config file
-	cp memcache_file memcache_bak_file
+	cp $memcache_file $memcache_bak_file
 
 	sed -i 's|-l 127.0.0.1|'"-l $CTL_MGNT_IP"'|g' $memcache_file
 

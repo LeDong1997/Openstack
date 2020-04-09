@@ -40,9 +40,9 @@ install_dns_service () {
 
 	# Config DNS service
 	dns_file=/etc/resolvconf/resolv.conf.d/head
-	echo "nameserver 8.8.8.8" >> dns_file
-	echo "nameserver 1.1.1.1" >> dns_file
-	echo "nameserver 8.8.4.4" >> dns_file
+	echo "nameserver 8.8.8.8" >> $dns_file
+	echo "nameserver 1.1.1.1" >> $dns_file
+	echo "nameserver 8.8.4.4" >> $dns_file
 
 	service resolvconf restart
 

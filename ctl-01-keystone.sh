@@ -32,8 +32,8 @@ keystone_install () {
 keystone_config () {
 	echocolor "Create file backup keystone"
 	keystone_file=/etc/keystone/keystone.conf
-	keystone_bak_filebak=/etc/keystone/keystone.conf.bak
-	cp $keystone_file  $keystone_bak_file
+	keystone_bak_file=/etc/keystone/keystone.conf.bak
+	cp $keystone_file $keystone_bak_file
 	egrep -v "^#|^$" $keystone_bak_file > $keystone_file
 
 	ops_add $keystone_file database connection mysql+pymysql://keystone:$KEYSTONE_DBPASS@$HOST_CTL/keystone

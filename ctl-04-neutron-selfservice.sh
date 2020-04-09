@@ -5,9 +5,9 @@ source functions.sh
 source info_config.sh
 
 # Install neutron in controller node
-source /home/openstack/Setin/ctl-04-neutron-selfservice-install.sh
+source /home/openstack/Stein/ctl-04-neutron-selfservice-install.sh
 # Install neutron in compute node
-source /home/openstack/Setin/com-04-neutron-selfservice-install.sh
+source /home/openstack/Stein/com-04-neutron-selfservice-install.sh
 
 # Function Verify install neutron service
 neutron_verify_install (){

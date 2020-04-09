@@ -53,7 +53,7 @@ install_dns_service () {
 remove_netplan () {
 	echocolor "Start remove netplan package"
 	# Remove config
-	apt-get purge netplan.io
+	apt-get -y purge netplan.io
 	# Remove directory netplan service
 	rm -rf /etc/netplan
 	rm -rf /usr/share/netplan
@@ -93,27 +93,14 @@ gateway $GATEWAY_EXT_IP
 dns-nameservers 1.1.1.1 8.8.8.8
 EOF
 
+	echocolor "Done config ip address for Controller Node"
+	echocolor "Start reboot system to update network"
 	# Reset network interface
 	ip a flush $CTL_EXT_IF
 	ip a flush $CTL_MGNT_IF
 	ip r del default
 	ifdown -a && ifup -a
 	service networking restart
-	echocolor "Done config ip address for Controller Node"
-}
-
-# Function test network conection
-test_conn_network () {
-	echocolor "Test network conection for Controller Node"
-	ping 8.8.8.8 -c 3
-	ping $HOST_CTL -c 3
-	ping $HOST_COM1 -c 3
-	ping $HOST_STR1 -c 3
-
-	# Test dns resolve
-	ping google.com -c 3
-
-	echocolor "Done test network conection"
 }
 
 
@@ -139,8 +126,5 @@ remove_netplan
 
 ## Config ip address
 config_ip
-
-## Test network connection
-test_conn_network
 
 reboot

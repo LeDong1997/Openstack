@@ -4,6 +4,20 @@
 source functions.sh
 source info_config.sh
 
+# Function test network conection
+test_conn_network () {
+	echocolor "Test network conection for Controller Node"
+	ping 8.8.8.8 -c 3
+	ping $HOST_CTL -c 3
+	ping $HOST_COM1 -c 3
+	ping $HOST_STR1 -c 3
+
+	# Test dns resolve
+	ping google.com -c 3
+
+	echocolor "Done test network conection"
+}
+
 # Function update and upgrade for CONTROLLER
 update_upgrade () {
 	echocolor "Update and upgrade package in controller node"
@@ -133,6 +147,9 @@ install_memcached () {
 #######################
 ###Execute functions###
 #######################
+
+## Test network connection
+test_conn_network
 
 # Update and upgrade for controller
 update_upgrade

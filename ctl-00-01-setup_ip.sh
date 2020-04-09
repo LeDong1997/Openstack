@@ -142,3 +142,5 @@ config_ip
 
 ## Test network connection
 test_conn_network
+
+reboot

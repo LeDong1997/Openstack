@@ -40,7 +40,7 @@ swift_proxy_config () {
 	ops_add $proxy_serverfile DEFAULT swift_dir /etc/swift
 	ops_add $proxy_serverfile DEFAULT bind_ip 0.0.0.0
 
-	ops_del $proxy_serverfile "pipeline:main" pipeline
+	#ops_del $proxy_serverfile "pipeline:main" pipeline
 	ops_add $proxy_serverfile "pipeline:main" pipeline "catch_errors gatekeeper healthcheck proxy-logging cache container_sync bulk ratelimit authtoken keystoneauth container-quotas account-quotas slo dlo versioned_writes proxy-logging proxy-server"
 
 	ops_add $proxy_serverfile "app:proxy-server" account_autocreate True

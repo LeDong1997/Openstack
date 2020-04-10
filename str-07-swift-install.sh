@@ -110,8 +110,8 @@ swift_install(){
 	ops_add $object_serverfile DEFAULT devices /srv/node
 	ops_add $object_serverfile DEFAULT mount_check true
 
-	ops_add $object-serverfile "filter:recon" recon_cache_path /var/cache/swift
-	ops_add $object-serverfile "filter:recon" recon_lock_path /var/lock
+	ops_add $object_serverfile "filter:recon" recon_cache_path /var/cache/swift
+	ops_add $object_serverfile "filter:recon" recon_lock_path /var/lock
 
 	chown -R swift:swift /srv/node/
 	mkdir -p /var/cache/swift

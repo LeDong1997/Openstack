@@ -20,8 +20,8 @@ swift_preinstall(){
 	mkdir -p /srv/node/sdd
 
 	fstabfile=/etc/fstab
-	# echo "/dev/sdc /srv/node/sdc xfs noatime,nodiratime,nobarrier,logbufs=8 0 2" >> $fstabfile
-	# echo "/dev/sdd /srv/node/sdd xfs noatime,nodiratime,nobarrier,logbufs=8 0 2" >> $fstabfile
+	echo "/dev/sdc /srv/node/sdc xfs noatime,nodiratime,nobarrier,logbufs=8 0 2" >> $fstabfile
+	echo "/dev/sdd /srv/node/sdd xfs noatime,nodiratime,nobarrier,logbufs=8 0 2" >> $fstabfile
 
 	mount /srv/node/sdc
 	mount /srv/node/sdd

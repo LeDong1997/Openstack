@@ -18,12 +18,11 @@ swift_pre_install () {
 }
 
 swift_proxy_install () {
-	source /root/admin-openrc
 	echocolor "Install swift proxy"
 	apt-get install -y swift swift-proxy python3-swiftclient python3-keystonemiddleware python3-memcache python3-keystoneclient
 
 	mkdir /etc/swift
-	cd /etc/swift && curl -o /etc/swift/proxy-server.conf https://opendev.org/openstack/swift/raw/branch/stable/stein/etc/proxy-server.conf-sample
+	curl -o /etc/swift/proxy-server.conf https://opendev.org/openstack/swift/raw/branch/stable/stein/etc/proxy-server.conf-sample
 	echocolor "Done install swift proxy"
 }
 
@@ -40,7 +39,7 @@ swift_proxy_config () {
 	ops_add $proxy_serverfile DEFAULT swift_dir /etc/swift
 	ops_add $proxy_serverfile DEFAULT bind_ip 0.0.0.0
 
-	ops_add $proxy_serverfile "pipeline:main" pipeline "catch_errors gatekeeper healthcheck proxy-logging cache container_sync bulk ratelimit container-quotas account-quotas slo dlo versioned_writes proxy-server proxy-logging listing_formats copy symlink authtoken keystoneauth"
+	ops_add $proxy_serverfile pipeline:main pipeline "catch_errors gatekeeper healthcheck proxy-logging cache container_sync bulk ratelimit container-quotas account-quotas slo dlo versioned_writes proxy-server proxy-logging listing_formats copy symlink authtoken keystoneauth"
 
 	ops_add $proxy_serverfile "app:proxy-server" account_autocreate True
 	
@@ -67,36 +66,8 @@ swift_proxy_config () {
 }
 
 
-# swift_pre_install
+swift_pre_install
 
 swift_proxy_install
 
 swift_proxy_config
-
-# Install swift in storage node
-source /home/openstack/Stein/str-07-swift-install.sh
-
-# Install swift in controller node
-source /home/openstack/Stein/ctl-07-swift-ring.sh
-
-# Verify install swift service
-verify_swift_install (){
-	swift-init all start
-	echocolor "Verify install swift service"
-	sleep 3
-	source /root/admin-openrc
-	swift stat
-	openstack container create container1
-	echo "IT6500-Cloud Computing" >> test-object.txt
-	openstack object create container1 test-object.txt
-	openstack object list container1
-	mkdir Downloads && cd Downloads && openstack object save container1 test-object.txt
-	echocolor "Done verify install swift service"
-}
-
-#######################
-###Execute functions###
-#######################
-
-# Verify install Cinder service
-verify_swift_install

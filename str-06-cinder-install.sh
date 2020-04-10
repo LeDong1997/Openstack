@@ -53,7 +53,7 @@ cinder_config (){
 	
 	ops_add $cinderfile DEFAULT auth_strategy keystone
 	
-	ops_add $cinderfile keystone_authtoken auth_uri http://$HOST_CTL:5000
+	ops_add $cinderfile keystone_authtoken www_authenticate_uri http://$HOST_CTL:5000
 	ops_add $cinderfile keystone_authtoken auth_url http://$HOST_CTL:5000
 	ops_add $cinderfile keystone_authtoken memcached_servers $HOST_CTL:11211
 	ops_add $cinderfile keystone_authtoken auth_type password

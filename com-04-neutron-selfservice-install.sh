@@ -18,7 +18,7 @@ neutron_config_server_component () {
 	echocolor "Configure the common component"
 	sleep 3
 
-	# neutronfile=/etc/neutron/neutron.conf
+	neutronfile=/etc/neutron/neutron.conf
 	# neutronfilebak=/etc/neutron/neutron.conf.bak
 	# cp $neutronfile $neutronfilebak
 	# egrep -v "^$|^#" $neutronfilebak > $neutronfile

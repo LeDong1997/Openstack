@@ -39,7 +39,8 @@ swift_proxy_config () {
 	ops_add $proxy_serverfile DEFAULT swift_dir /etc/swift
 	ops_add $proxy_serverfile DEFAULT bind_ip 0.0.0.0
 
-	ops_add $proxy_serverfile pipeline:main pipeline "catch_errors gatekeeper healthcheck proxy-logging cache container_sync bulk ratelimit container-quotas account-quotas slo dlo versioned_writes proxy-server proxy-logging listing_formats copy symlink authtoken keystoneauth"
+	sed -i 's/pipeline = catch_errors gatekeeper healthcheck proxy-logging cache listing_formats container_sync bulk tempurl ratelimit tempauth copy container-quotas account-quotas slo dlo versioned_writes symlink proxy-logging proxy-server/\
+pipeline = catch_errors gatekeeper healthcheck proxy-logging cache listing_formats container_sync bulk ratelimit authtoken keystoneauth copy container-quotas account-quotas slo dlo versioned_writes symlink proxy-logging proxy-server/g' $proxy_serverfile
 
 	ops_add $proxy_serverfile "app:proxy-server" account_autocreate True
 	

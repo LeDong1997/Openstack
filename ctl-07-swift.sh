@@ -15,7 +15,7 @@ source /home/openstack/Stein/ctl-07-swift-ring.sh
 
 # Verify install swift service
 verify_swift_install (){
-	cd ~/Stein
+	cd /home/openstack/Stein
 	swift-init all start
 	echocolor "Verify install swift service"
 	sleep 3

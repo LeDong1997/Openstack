@@ -77,7 +77,7 @@ neutron_config_server_component () {
 
 
 	ops_add $neutronfile DEFAULT auth_strategy keystone
-	ops_add $neutronfile keystone_authtoken auth_uri http://$HOST_CTL:5000
+	ops_add $neutronfile keystone_authtoken www_authenticate_uri http://$HOST_CTL:5000
 	ops_add $neutronfile keystone_authtoken auth_url http://$HOST_CTL:5000
 	ops_add $neutronfile keystone_authtoken memcached_servers $HOST_CTL:11211
 	ops_add $neutronfile keystone_authtoken auth_type password
@@ -102,7 +102,6 @@ neutron_config_server_component () {
 	ops_add $neutronfile oslo_concurrency lock_path /var/lib/neutron/tmp
 
 	ops_add $neutronfile DEFAULT dhcp_agent_notification true
-	ops_add $neutronfile agent root_helper "sudo /usr/bin/neutron-rootwrap /etc/neutron/rootwrap.conf"
 	echocolor "Done config component for neutron service"
 }
 
@@ -262,6 +261,10 @@ neutron_config_compute_use_network () {
 	echocolor "Configure the Compute service to use the Networking service"
 	sleep 3
 	novafile=/etc/nova/nova.conf
+
+	ops_add $novafile DEFAULT use_neutron true
+	ops_add $novafile DEFAULT linuxnet_interface_driver nova.network.linux_net.LinuxBridgeInterfaceDriver
+	ops_add $novafile DEFAULT firewall_driver nova.virt.firewall.NoopFirewallDriver
 
 	ops_add $novafile neutron url http://$HOST_CTL:9696
 	ops_add $novafile neutron auth_url http://$HOST_CTL:5000

@@ -43,6 +43,7 @@ swift_proxy_config () {
 
 	ops_add $proxy_serverfile "app:proxy-server" account_autocreate True
 	
+	ops_add $proxy_serverfile "filter:keystoneauth" use "egg:swift#keystoneauth"
 	ops_add $proxy_serverfile "filter:keystoneauth" operator_roles "admin,user"
 
 	ops_add $proxy_serverfile "filter:authtoken" paste.filter_factory "keystonemiddleware.auth_token:filter_factory"

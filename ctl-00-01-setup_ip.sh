@@ -11,6 +11,7 @@ config_hostname () {
 	# hostnamectl set-hostname $HOST_CTL
 	echo "$HOST_NAME" > /etc/hostname
 	hostnamectl set-hostname $HOST_NAME
+	sed -i 's/preserve_hostname: false/preserve_hostname: true/g' /etc/cloud/cloud.cfg
 
 	cat << EOF >/etc/hosts
 127.0.0.1	localhost
@@ -62,6 +63,11 @@ remove_netplan () {
 
 # Function config IP address
 config_ip () {
+	echocolor "Config card ethenet in grub-boot"
+	sed -i 's/GRUB_CMDLINE_LINUX=""/GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"/g' /etc/default/grub
+	update-grub
+	echocolor "Done update grub-boot"
+
 	echocolor "Start config ip address"
 	cat << EOF > /etc/network/interfaces
 # This file describes the network interfaces available on your system
@@ -93,7 +99,6 @@ gateway $GATEWAY_EXT_IP
 dns-nameservers 1.1.1.1 8.8.8.8
 EOF
 
-	echocolor "Done config ip address for Controller Node"
 	echocolor "Start reboot system to update network"
 	# Reset network interface
 	ip a flush $CTL_EXT_IF
@@ -101,6 +106,7 @@ EOF
 	ip r del default
 	ifdown -a && ifup -a
 	service networking restart
+	echocolor "Done config ip address for Controller Node"
 }
 
 
@@ -127,4 +133,5 @@ remove_netplan
 ## Config ip address
 config_ip
 
+# Reboot system
 reboot

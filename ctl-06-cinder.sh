@@ -4,11 +4,11 @@
 source functions.sh
 source info_config.sh
 
-# Install cinder in block storage node
-source /home/openstack/Stein/str-06-cinder-install.sh
-
 # Install cinder in controller node
 source /home/openstack/Stein/ctl-06-cinder-install.sh
+
+# Install cinder in block storage node
+source /home/openstack/Stein/str-06-cinder-install.sh
 
 # Verify install Cinder service
 verify_cinder_install (){

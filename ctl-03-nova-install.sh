@@ -173,6 +173,8 @@ nova_restart () {
 	service nova-conductor restart
 	service nova-novncproxy restart
 	service apache2 restart
+	source /root/admin-openrc
+	openstack compute service list
 	echocolor "Done finalize installation nova service"
 }
 

@@ -1,8 +1,8 @@
 #!/bin/bash
-#Author Le Van Dong (Cu Lee)
+#Custom by Le Nam
 
-source function.sh
-source config.sh
+source functions.sh
+source info_config.sh
 
 swift_preinstall(){
 	echocolor "Check hardware install swift"
@@ -20,8 +20,8 @@ swift_preinstall(){
 	mkdir -p /srv/node/sdd
 
 	fstabfile=/etc/fstab
-	echo "/dev/sdc /srv/node/sdc xfs noatime,nodiratime,nobarrier,logbufs=8 0 2" >> $fstabfile
-	echo "/dev/sdd /srv/node/sdd xfs noatime,nodiratime,nobarrier,logbufs=8 0 2" >> $fstabfile
+	# echo "/dev/sdc /srv/node/sdc xfs noatime,nodiratime,nobarrier,logbufs=8 0 2" >> $fstabfile
+	# echo "/dev/sdd /srv/node/sdd xfs noatime,nodiratime,nobarrier,logbufs=8 0 2" >> $fstabfile
 
 	mount /srv/node/sdc
 	mount /srv/node/sdd
@@ -55,7 +55,7 @@ read only = False
 lock file = /var/lock/object.lock		
 EOF
 
-	echo "RSYNC_ENABLE=true" >> "/etc/default/rsync"
+	sed -i 's/RSYNC_ENABLE=false/RSYNC_ENABLE=true/g' "/etc/default/rsync"
 	service rsync start
 	echocolor "Done pre install swift in storage node"
 }
@@ -65,53 +65,53 @@ swift_install(){
 	echocolor "Install swift"
 	sleep 3
 
-	apt-get install swift swift-account swift-container swift-object
+	apt-get install swift swift-account swift-container swift-object -y
 	curl -o /etc/swift/account-server.conf https://opendev.org/openstack/swift/raw/branch/stable/stein/etc/account-server.conf-sample
 	curl -o /etc/swift/container-server.conf https://opendev.org/openstack/swift/raw/branch/stable/stein/etc/container-server.conf-sample
 	curl -o /etc/swift/object-server.conf https://opendev.org/openstack/swift/raw/branch/stable/stein/etc/object-server.conf-sample
 
 	echocolor "Edit account-server.conf"
-	account-serverfile=/etc/swift/account-server.conf
-	account-serverfilebak=/etc/swift/account-serverfile.conf.bak
-	cp $account-serverfile $account-serverfilebak
+	account_serverfile=/etc/swift/account-server.conf
+	account_serverfilebak=/etc/swift/account-server.conf.bak
+	cp $account_serverfile $account_serverfilebak
 
-	ops_add $account-serverfile DEFAULT bind_ip 0.0.0.0
-	ops_add $account-serverfile DEFAULT bind_port 6202
-	ops_add $account-serverfile DEFAULT user swift
-	ops_add $account-serverfile DEFAULT swift_dir /etc/swift
-	ops_add $account-serverfile DEFAULT devices /srv/node
-	ops_add $account-serverfile DEFAULT mount_check true
+	ops_add $account_serverfile DEFAULT bind_ip 0.0.0.0
+	ops_add $account_serverfile DEFAULT bind_port 6202
+	ops_add $account_serverfile DEFAULT user swift
+	ops_add $account_serverfile DEFAULT swift_dir /etc/swift
+	ops_add $account_serverfile DEFAULT devices /srv/node
+	ops_add $account_serverfile DEFAULT mount_check true
 
-	ops_add $account-serverfile filter:recon recon_cache_path /var/cache/swift
+	ops_add $account_serverfile filter:recon recon_cache_path /var/cache/swift
 
 	echocolor "Edit container-server.conf"
-	container-serverfile=/etc/swift/container-server.conf
-	container-serverfilebak=/etc/swift/container-server.conf.bak
-	cp $container-serverfile $container-serverfilebak
+	container_serverfile=/etc/swift/container-server.conf
+	container_serverfilebak=/etc/swift/container-server.conf.bak
+	cp $container_serverfile $container_serverfilebak
 
-	ops_add $container-serverfile DEFAULT bind_ip 0.0.0.0
-	ops_add $container-serverfile DEFAULT bind_port 6201
-	ops_add $container-serverfile DEFAULT user swift
-	ops_add $container-serverfile DEFAULT swift_dir /etc/swift
-	ops_add $container-serverfile DEFAULT devices /srv/node
-	ops_add $container-serverfile DEFAULT mount_check true
+	ops_add $container_serverfile DEFAULT bind_ip 0.0.0.0
+	ops_add $container_serverfile DEFAULT bind_port 6201
+	ops_add $container_serverfile DEFAULT user swift
+	ops_add $container_serverfile DEFAULT swift_dir /etc/swift
+	ops_add $container_serverfile DEFAULT devices /srv/node
+	ops_add $container_serverfile DEFAULT mount_check true
 
-	ops_add $container-serverfile filter:recon recon_cache_path /var/cache/swift
+	ops_add $container_serverfile "filter:recon" recon_cache_path /var/cache/swift
 
 	echocolor "Edit object-server.conf"
-	object-serverfile=/etc/swift/object-server-server.conf
-	object-serverfilebak=/etc/swift/object-server-server.conf.bak
-	cp $object-serverfile $object-serverfilebak
+	object_serverfile=/etc/swift/object-server.conf
+	object_serverfilebak=/etc/swift/object-server.conf.bak
+	cp $object_serverfile $object_serverfilebak
 
-	ops_add $object-serverfile DEFAULT bind_ip 0.0.0.0
-	ops_add $object-serverfile DEFAULT bind_port 6200
-	ops_add $object-serverfile DEFAULT user swift
-	ops_add $object-serverfile DEFAULT swift_dir /etc/swift
-	ops_add $object-serverfile DEFAULT devices /srv/node
-	ops_add $object-serverfile DEFAULT mount_check true
+	ops_add $object_serverfile DEFAULT bind_ip 0.0.0.0
+	ops_add $object_serverfile DEFAULT bind_port 6200
+	ops_add $object_serverfile DEFAULT user swift
+	ops_add $object_serverfile DEFAULT swift_dir /etc/swift
+	ops_add $object_serverfile DEFAULT devices /srv/node
+	ops_add $object_serverfile DEFAULT mount_check true
 
-	ops_add $object-serverfile filter:recon recon_cache_path /var/cache/swift
-	ops_add $object-serverfile filter:recon recon_lock_path = /var/lock
+	ops_add $object-serverfile "filter:recon" recon_cache_path /var/cache/swift
+	ops_add $object-serverfile "filter:recon" recon_lock_path /var/lock
 
 	chown -R swift:swift /srv/node/
 	mkdir -p /var/cache/swift
